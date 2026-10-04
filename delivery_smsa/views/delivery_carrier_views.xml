@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_delivery_carrier_form_with_smsa" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.with.smsa</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='delivery_type']" position="inside">
+                <option value="smsa">SMSA Express</option>
+            </xpath>
+
+            <xpath expr="//notebook/page[@name='pricing']" position="attributes">
+                <attribute name="invisible">delivery_type not in ['base_on_rule', 'smsa']</attribute>
+            </xpath>
+            
+            <xpath expr="//notebook" position="inside">
+                <page string="SMSA Configuration"
+                      invisible="delivery_type != 'smsa'">
+                    <group>
+                        <group string="API Credentials">
+                            <field name="smsa_api_url_live"
+                                   placeholder="e.g., https://ecom.smsaexpress.com"
+                                   invisible="not prod_environment"/>
+                            <field name="smsa_api_url_test"
+                                   placeholder="e.g., https://ecomapis-sandbox.azurewebsites.net"
+                                   invisible="prod_environment"/>
+                            <field name="smsa_apikey_live"
+                                   invisible="not prod_environment"
+                                   help="Your SMSA API Key"/>
+                            <field name="smsa_apikey_test"
+                                   invisible="prod_environment"
+                                   help="Your SMSA API Key"/>
+                        </group>
+                        <group string="Default Shipper Details">
+                            <field name="smsa_shipper_contact"/>
+                            <field name="smsa_shipper_phone"/>
+                            <field name="smsa_shipper_address_line1"/>
+                            <field name="smsa_shipper_city"
+                                   placeholder="e.g., Riyadh"/>
+                            <field name="smsa_shipper_district"/>
+                            <field name="smsa_shipper_postal_code"/>
+                            <field name="smsa_shipper_country"/>
+                        </group>
+                        <group string="Default Service">
+                            <field name="smsa_service_code"
+                                   help="Default service code to use for shipping (e.g., 'EDDL')."/>
+                            <field name="smsa_waybill_type"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
